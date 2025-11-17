@@ -6,6 +6,7 @@ from nota import inserir_nota, listar_notas, alterar_nota, excluir_nota
 from listar import listar
 from alterar import alterar
 from excluir import excluir
+from exportar import exportar_dados
 
 def testar_conexao(conn: sqlite3.Connection) -> bool:
     try:
@@ -93,7 +94,7 @@ Opções disponíveis para {acao} {sub_opcao}:
         """)
         return input("Digite uma opção: ")
 
-    while opcao != "5":
+    while opcao != "6":
         limpar_tela()
         print("=" * 50)
         print(f"SISTEMA ESCOLAR".center(50))
@@ -106,7 +107,8 @@ Opções disponiveis:
         2. Alterar
         3. Listar
         4. Excluir
-        5. Sair
+        5. Exportar Dados
+        6. Sair
             """)
         opcao = input("Digite uma opção: ")
         match opcao:
@@ -119,6 +121,8 @@ Opções disponiveis:
             case "4":
                 exibir_submenu("Excluir")
             case "5":
+                exportar_dados(cursor, conn)
+            case "6":
                 print("Você escolheu sair! ")                
             case _:
                 print("Valor digitado invalido. Tente novamente!")

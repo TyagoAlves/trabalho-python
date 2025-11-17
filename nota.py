@@ -6,7 +6,7 @@ def inserir_nota(cursor, conn):
     print("INSERINDO NOTA".center(50))
     print("=" * 50)
     
-    # Listar alunos
+
     cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
     alunos = cursor.fetchall()
     
@@ -21,14 +21,13 @@ def inserir_nota(cursor, conn):
     for aluno in alunos:
         print(f"{aluno[0]:<5} {aluno[1]:<30}")
     
-    # Selecionar aluno
+
     try:
         id_aluno = int(input("\nDigite o ID do aluno: "))
     except ValueError:
         print("ID inválido!")
         return False
-    
-    # Listar disciplinas
+
     cursor.execute("SELECT ID, NOME FROM DISCIPLINAS ORDER BY ID")
     disciplinas = cursor.fetchall()
     
@@ -43,7 +42,7 @@ def inserir_nota(cursor, conn):
     for disciplina in disciplinas:
         print(f"{disciplina[0]:<5} {disciplina[1]:<30}")
     
-    # Selecionar disciplina
+
     try:
         id_disciplina = int(input("\nDigite o ID da disciplina: "))
         nota = float(input("Digite a nota (0-10): "))
@@ -51,12 +50,11 @@ def inserir_nota(cursor, conn):
         print("Valores inválidos!")
         return False
     
-    # Validar nota
+ 
     if not (0 <= nota <= 10):
         print("Nota deve estar entre 0 e 10!")
         return False
-    
-    # Inserir nota
+
     cursor.execute("INSERT INTO NOTAS (ID_ALUNO, ID_DISCIPLINA, NOTA) VALUES (?, ?, ?)", 
                    (id_aluno, id_disciplina, nota))
     conn.commit()
@@ -125,7 +123,7 @@ def listar_notas_por_aluno(cursor):
     
     try:
         if busca.isdigit():
-            # Busca por ID
+
             cursor.execute("""
                 SELECT n.ID, a.NOME, d.NOME, n.NOTA 
                 FROM NOTAS n
@@ -135,7 +133,7 @@ def listar_notas_por_aluno(cursor):
                 ORDER BY d.NOME
             """, (int(busca),))
         else:
-            # Busca por nome
+ 
             cursor.execute("""
                 SELECT n.ID, a.NOME, d.NOME, n.NOTA 
                 FROM NOTAS n
@@ -175,7 +173,7 @@ def listar_notas_por_disciplina(cursor):
     
     try:
         if busca.isdigit():
-            # Busca por ID
+            
             cursor.execute("""
                 SELECT n.ID, a.NOME, d.NOME, n.NOTA 
                 FROM NOTAS n
@@ -185,7 +183,7 @@ def listar_notas_por_disciplina(cursor):
                 ORDER BY a.NOME
             """, (int(busca),))
         else:
-            # Busca por nome
+
             cursor.execute("""
                 SELECT n.ID, a.NOME, d.NOME, n.NOTA 
                 FROM NOTAS n
@@ -216,7 +214,7 @@ def alterar_nota(cursor, conn):
     print("ALTERANDO NOTA".center(50))
     print("=" * 50)
     
-    # Listar alunos disponíveis
+
     cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
     alunos = cursor.fetchall()
     
@@ -231,7 +229,7 @@ def alterar_nota(cursor, conn):
     for aluno in alunos:
         print(f"{aluno[0]:<5} {aluno[1]:<30}")
     
-    # Selecionar aluno
+
     try:
         id_aluno = int(input("\nDigite o ID do aluno: "))
     except ValueError:
@@ -239,7 +237,7 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se aluno existe
+
     cursor.execute("SELECT NOME FROM ALUNOS WHERE ID = ?", (id_aluno,))
     aluno_nome = cursor.fetchone()
     if not aluno_nome:
@@ -247,7 +245,7 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Listar disciplinas disponíveis
+
     cursor.execute("SELECT ID, NOME FROM DISCIPLINAS ORDER BY ID")
     disciplinas = cursor.fetchall()
     
@@ -262,7 +260,7 @@ def alterar_nota(cursor, conn):
     for disciplina in disciplinas:
         print(f"{disciplina[0]:<5} {disciplina[1]:<30}")
     
-    # Selecionar disciplina
+
     try:
         id_disciplina = int(input("\nDigite o ID da disciplina: "))
     except ValueError:
@@ -270,7 +268,7 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se disciplina existe
+
     cursor.execute("SELECT NOME FROM DISCIPLINAS WHERE ID = ?", (id_disciplina,))
     disciplina_nome = cursor.fetchone()
     if not disciplina_nome:
@@ -278,7 +276,7 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se existe nota para essa combinação aluno/disciplina
+
     cursor.execute("""
         SELECT ID, NOTA FROM NOTAS 
         WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?
@@ -292,7 +290,7 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Mostrar dados atuais e solicitar nova nota
+
     print(f"\nAluno: {aluno_nome[0]}")
     print(f"Disciplina: {disciplina_nome[0]}")
     print(f"Nota atual: {nota_existente[1]}")
@@ -304,13 +302,13 @@ def alterar_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Validar nota
+
     if not (0 <= nova_nota <= 10):
         print("Nota deve estar entre 0 e 10!")
         input("\nPressione Enter para continuar...")
         return False
     
-    # Atualizar no banco
+
     cursor.execute("""
         UPDATE NOTAS SET NOTA = ? 
         WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?
@@ -328,7 +326,7 @@ def excluir_nota(cursor, conn):
     print("EXCLUINDO NOTA".center(50))
     print("=" * 50)
     
-    # Listar alunos disponíveis
+
     cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
     alunos = cursor.fetchall()
     
@@ -343,7 +341,7 @@ def excluir_nota(cursor, conn):
     for aluno in alunos:
         print(f"{aluno[0]:<5} {aluno[1]:<30}")
     
-    # Selecionar aluno
+
     try:
         id_aluno = int(input("\nDigite o ID do aluno: "))
     except ValueError:
@@ -351,7 +349,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se aluno existe
+
     cursor.execute("SELECT NOME FROM ALUNOS WHERE ID = ?", (id_aluno,))
     aluno_nome = cursor.fetchone()
     if not aluno_nome:
@@ -359,7 +357,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Listar disciplinas disponíveis
+
     cursor.execute("SELECT ID, NOME FROM DISCIPLINAS ORDER BY ID")
     disciplinas = cursor.fetchall()
     
@@ -374,7 +372,7 @@ def excluir_nota(cursor, conn):
     for disciplina in disciplinas:
         print(f"{disciplina[0]:<5} {disciplina[1]:<30}")
     
-    # Selecionar disciplina
+
     try:
         id_disciplina = int(input("\nDigite o ID da disciplina: "))
     except ValueError:
@@ -382,7 +380,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se disciplina existe
+
     cursor.execute("SELECT NOME FROM DISCIPLINAS WHERE ID = ?", (id_disciplina,))
     disciplina_nome = cursor.fetchone()
     if not disciplina_nome:
@@ -390,7 +388,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Verificar se existe nota para essa combinação aluno/disciplina
+
     cursor.execute("""
         SELECT ID, NOTA FROM NOTAS 
         WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?
@@ -404,7 +402,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Confirmar exclusão
+
     print(f"\nVocê tem certeza que deseja excluir:")
     print(f"Aluno: {aluno_nome[0]}")
     print(f"Disciplina: {disciplina_nome[0]}")
@@ -416,7 +414,7 @@ def excluir_nota(cursor, conn):
         input("\nPressione Enter para continuar...")
         return False
     
-    # Excluir do banco
+
     cursor.execute("""
         DELETE FROM NOTAS 
         WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?

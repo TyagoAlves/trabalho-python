@@ -1,17 +1,12 @@
-#!/usr/bin/env python3
-"""
-Exemplo de uso da funcionalidade de exportação
-Este arquivo demonstra como a exportação funciona
-"""
 
 import sqlite3
 from exportar import exportar_txt, exportar_csv, exportar_json
 
-# Criar banco de exemplo
+
 with sqlite3.connect('exemplo.db') as conn:
     cursor = conn.cursor()
     
-    # Criar tabelas
+
     cursor.execute("""CREATE TABLE IF NOT EXISTS ALUNOS(
                         ID INTEGER NOT NULL,
                         NOME TEXT NOT NULL,
@@ -34,7 +29,7 @@ with sqlite3.connect('exemplo.db') as conn:
                     FOREIGN KEY (ID_DISCIPLINA) REFERENCES DISCIPLINAS(ID)
                 );""")
     
-    # Inserir dados de exemplo
+
     cursor.execute("INSERT INTO ALUNOS (NOME) VALUES ('João Silva')")
     cursor.execute("INSERT INTO ALUNOS (NOME) VALUES ('Maria Santos')")
     cursor.execute("INSERT INTO ALUNOS (NOME) VALUES ('Pedro Costa')")
@@ -50,12 +45,12 @@ with sqlite3.connect('exemplo.db') as conn:
     
     conn.commit()
     
-    print("✅ Banco de exemplo criado!")
-    print("📁 Gerando arquivos de exemplo...")
+    print(" Banco de exemplo criado!")
+    print(" Gerando arquivos de exemplo...")
     
-    # Exportar exemplos
+
     exportar_txt("alunos", cursor)
     exportar_csv("disciplinas", cursor) 
     exportar_json("notas", cursor)
     
-    print("🎉 Exemplos de exportação criados com sucesso!")
+    print(" Exemplos de exportação criados com sucesso!")

@@ -5,7 +5,6 @@ from datetime import datetime
 from limpar_tela import limpar_tela
 
 def exportar_dados(cursor, conn):
-    """Menu principal para exportação de dados"""
     limpar_tela()
     print("=" * 50)
     print("EXPORTAR DADOS".center(50))
@@ -39,7 +38,7 @@ Escolha o que exportar:
             exportar_dados(cursor, conn)
 
 def escolher_formato(tipo_dados, cursor):
-    """Escolhe o formato de exportação"""
+
     limpar_tela()
     print(f"Exportar {tipo_dados.upper()} em qual formato?")
     print("""
@@ -66,7 +65,6 @@ def escolher_formato(tipo_dados, cursor):
             escolher_formato(tipo_dados, cursor)
 
 def exportar_txt(tipo_dados, cursor):
-    """Exporta dados em formato TXT"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{tipo_dados}_{timestamp}.txt"
     
@@ -111,7 +109,7 @@ def exportar_txt(tipo_dados, cursor):
                     f.write(f"{row[0]:<5} {row[1]:<20} {row[2]:<20} {row[3]:<10}\n")
                     
             elif tipo_dados == "todos":
-                # Alunos
+                
                 cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
                 f.write("ALUNOS\n")
                 f.write("-" * 40 + "\n")
@@ -120,7 +118,7 @@ def exportar_txt(tipo_dados, cursor):
                 
                 f.write("\n" + "=" * 60 + "\n\n")
                 
-                # Disciplinas
+
                 cursor.execute("SELECT ID, NOME FROM DISCIPLINAS ORDER BY ID")
                 f.write("DISCIPLINAS\n")
                 f.write("-" * 40 + "\n")
@@ -129,7 +127,7 @@ def exportar_txt(tipo_dados, cursor):
                 
                 f.write("\n" + "=" * 60 + "\n\n")
                 
-                # Notas
+
                 cursor.execute("""
                     SELECT n.ID, a.NOME, d.NOME, n.NOTA 
                     FROM NOTAS n 
@@ -142,10 +140,10 @@ def exportar_txt(tipo_dados, cursor):
                 for row in cursor.fetchall():
                     f.write(f"ID: {row[0]} - Aluno: {row[1]} - Disciplina: {row[2]} - Nota: {row[3]}\n")
         
-        print(f"✅ Arquivo '{filename}' criado com sucesso!")
+        print(f" Arquivo '{filename}' criado com sucesso!")
         
     except Exception as e:
-        print(f"❌ Erro ao criar arquivo: {e}")
+        print(f" Erro ao criar arquivo: {e}")
     
     input("Pressione Enter para continuar...")
 
@@ -180,7 +178,7 @@ def exportar_csv(tipo_dados, cursor):
                 writer.writerows(cursor.fetchall())
                 
             elif tipo_dados == "todos":
-                # Criar arquivo com múltiplas seções
+
                 writer.writerow(['TABELA', 'ID', 'NOME/ALUNO', 'DISCIPLINA', 'NOTA'])
                 
                 cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
@@ -201,11 +199,11 @@ def exportar_csv(tipo_dados, cursor):
                 for row in cursor.fetchall():
                     writer.writerow(['NOTAS', row[0], row[1], row[2], row[3]])
         
-        print(f"✅ Arquivo '{filename}' criado com sucesso!")
-        print("💡 Abra no Excel usando separador ';' (ponto e vírgula)")
+        print(f" Arquivo '{filename}' criado com sucesso!")
+        print(" Abra no Excel usando separador ';' (ponto e vírgula)")
         
     except Exception as e:
-        print(f"❌ Erro ao criar arquivo: {e}")
+        print(f" Erro ao criar arquivo: {e}")
     
     input("Pressione Enter para continuar...")
 
@@ -249,15 +247,15 @@ def exportar_json(tipo_dados, cursor):
             ]
             
         elif tipo_dados == "todos":
-            # Alunos
+
             cursor.execute("SELECT ID, NOME FROM ALUNOS ORDER BY ID")
             data["alunos"] = [{"id": row[0], "nome": row[1]} for row in cursor.fetchall()]
             
-            # Disciplinas
+
             cursor.execute("SELECT ID, NOME FROM DISCIPLINAS ORDER BY ID")
             data["disciplinas"] = [{"id": row[0], "nome": row[1]} for row in cursor.fetchall()]
             
-            # Notas
+
             cursor.execute("""
                 SELECT n.ID, n.ID_ALUNO, a.NOME, n.ID_DISCIPLINA, d.NOME, n.NOTA 
                 FROM NOTAS n 
@@ -277,10 +275,10 @@ def exportar_json(tipo_dados, cursor):
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
-        print(f"✅ Arquivo '{filename}' criado com sucesso!")
-        print("💡 Formato JSON estruturado para APIs e sistemas")
+        print(f" Arquivo '{filename}' criado com sucesso!")
+        print(" Formato JSON estruturado para APIs e sistemas")
         
     except Exception as e:
-        print(f"❌ Erro ao criar arquivo: {e}")
+        print(f" Erro ao criar arquivo: {e}")
     
     input("Pressione Enter para continuar...")
